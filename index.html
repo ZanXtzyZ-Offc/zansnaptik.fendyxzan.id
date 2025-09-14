@@ -753,7 +753,8 @@
             });
             
             function isValidTikTokUrl(url) {
-                const tiktokRegex = /^https?:\/\/(www\.)?tiktok\.com\/.+/;
+                // Menerima link vt.tiktok.com dan www.tiktok.com
+                const tiktokRegex = /^https?:\/\/(www\.|vt\.)?tiktok\.com\/.+/;
                 return tiktokRegex.test(url);
             }
             
