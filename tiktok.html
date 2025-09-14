@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Downloader - No Watermark</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #2a2a2a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(25, 25, 25, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #ff0050;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,0,80,0.1) 0%, rgba(0,0,0,0) 70%);
+            transform: rotate(0deg);
+            z-index: -1;
+        }
+
+        .logo {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .logo h1 {
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #ff0050 0%, #ff409c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(255, 0, 80, 0.3);
+        }
+
+        .logo p {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+
+        .logo-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #ff0050;
+            text-shadow: 0 0 20px rgba(255, 0, 80, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .social-title {
+            margin: 20px 0 15px;
+            color: #ff409c;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .youtube { background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%); }
+        .tiktok { background: linear-gradient(135deg, #000000 0%, #2a2a2a 100%); border: 1px solid #ff0050; }
+        .instagram { background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+
+        .sound-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00ccff 0%, #0066ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.3);
+            z-index: 10;
+        }
+
+        .sound-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
+        }
+
+        .sound-icon i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 80, 0.2);
+        }
+
+        .instructions h3 {
+            color: #ff409c;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions h3 i {
+            color: #ff0050;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            color: #ccc;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 25px;
+            border: 2px solid rgba(255, 0, 80, 0.3);
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(30, 30, 30, 0.8);
+            color: white;
+        }
+
+        .input-group input:focus {
+            border-color: #ff0050;
+            outline: none;
+            box-shadow: 0 5px 20px rgba(255, 0, 80, 0.3);
+        }
+
+        .input-group input::placeholder {
+            color: #888;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff0050 0%, #ff409c 100%);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 0, 80, 0.3);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 80, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .video-preview {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 0, 80, 0.3);
+        }
+
+        .download-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #00cc66 0%, #00b359 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 204, 102, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 204, 102, 0.4);
+        }
+
+        .audio-btn {
+            background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
+            box-shadow: 0 5px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        .audio-btn:hover {
+            box-shadow: 0 8px 20px rgba(255, 153, 0, 0.4);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #ff0050;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 20px rgba(255, 0, 80, 0.3);
+        }
+
+        .error {
+            display: none;
+            color: #ff3333;
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 51, 51, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ff3333;
+        }
+
+        .video-info {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 80, 0.2);
+        }
+
+        .video-info h3 {
+            color: #ff409c;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 0, 80, 0.3);
+            padding-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+
+        .info-item span:first-child {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Tab Section */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #ccc;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 15px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+            border-radius: 5px;
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #ff0050 0%, #ff409c 100%);
+            transition: width 0.3s;
+        }
+
+        .tab-btn:hover::after,
+        .tab-btn.active::after {
+            width: 100%;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            color: #ff409c;
+        }
+
+        .tab-content {
+            display: none;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 80, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content h3 {
+            color: #ff409c;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            border-bottom: 2px solid rgba(255, 0, 80, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .tab-content p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .tab-content ul {
+            color: #ccc;
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .tab-content li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+        }
+
+        .contact-item i {
+            color: #ff409c;
+            font-size: 1.2rem;
+            width: 25px;
+        }
+
+        .contact-item a {
+            color: #ff409c;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: #ff0050;
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2.2rem;
+            }
+            
+            .download-options {
+                flex-direction: column;
+            }
+            
+            .social-media {
+                gap: 15px;
+            }
+            
+            .social-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .tab-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sound-icon" id="soundButton">
+            <i class="fas fa-volume-up"></i>
+        </div>
+        
+        <div class="logo">
+            <div class="logo-icon"><i class="fab fa-tiktok"></i></div>
+            <h1>ZanSnapTik</h1>
+            <p>Download video TikTok tanpa watermark + audio</p>
+        </div>
+        
+        <div class="social-title">Sosial Media Developer</div>
+        <div class="social-media">
+            <a href="https://youtube.com/@zanxtzydev" class="social-icon youtube" target="_blank">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://tiktok.com/@zanxtzyzofficial" class="social-icon tiktok" target="_blank">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://www.instagram.com/zanxtzyzofficial" class="social-icon instagram" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Cara Menggunakan:</h3>
+            <ol>
+                <li>Buka aplikasi TikTok dan pilih video yang ingin didownload</li>
+                <li>Klik tombol "Share" dan salin link video</li>
+                <li>Tempel link video di kolom input di bawah</li>
+                <li>Klik tombol "Download" dan tunggu proses selesai</li>
+                <li>Klik tombol "Download Video" atau "Download Audio"</li>
+            </ol>
+        </div>
+        
+        <div class="input-group">
+            <input type="text" id="tiktokUrl" placeholder="Masukkan link video TikTok di sini...">
+        </div>
+        
+        <button class="btn" id="downloadBtn">
+            <span>Download Sekarang</span>
+        </button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Memproses video...</p>
+        </div>
+        
+        <div class="error" id="error"></div>
+        
+        <div class="result" id="result">
+            <h2>Video Berhasil Diunduh!</h2>
+            
+            <div class="video-info">
+                <h3>Informasi Video</h3>
+                <div class="info-item">
+                    <span>Judul:</span>
+                    <span id="videoTitle">-</span>
+                </div>
+                <div class="info-item">
+                    <span>Durasi:</span>
+                    <span id="videoDuration">-</span>
+                </div>
+                <div class="info-item">
+                    <span>Pembuat:</span>
+                    <span id="videoAuthor">-</span>
+                </div>
+            </div>
+            
+            <video class="video-preview" id="videoPreview" controls></video>
+            
+            <div class="download-options">
+                <a href="#" class="download-btn" id="videoDownload">
+                    <i class="fas fa-download"></i>
+                    <span>Download Video</span>
+                </a>
+                <a href="#" class="download-btn audio-btn" id="audioDownload">
+                    <i class="fas fa-music"></i>
+                    <span>Download Audio</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Tab Section -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="about">Tentang Kami</button>
+            <button class="tab-btn" data-tab="terms">Ketentuan Layanan</button>
+            <button class="tab-btn" data-tab="developer">Informasi Developer</button>
+        </div>
+        
+        <div class="tab-content" id="about">
+            <h3>Tentang ZanSnapTik</h3>
+            <p>Selamat datang di ZanSnapTik!</p>
+            <p>ZanSnapTik adalah platform online yang dirancang untuk memudahkan siapa saja dalam mengakses dan menyimpan konten publik dari TikTok. Dengan tampilan sederhana dan kecepatan tinggi, kami menghadirkan solusi yang praktis untuk mengunduh video maupun audio agar dapat dinikmati secara offline di berbagai perangkat, tanpa perlu aplikasi tambahan.</p>
+            <p>Kami percaya bahwa kemudahan akses informasi dan hiburan merupakan salah satu kebutuhan penting di era digital. Oleh karena itu, ZanSnapTik hadir sebagai sarana yang ringan, gratis, dan ramah pengguna.</p>
+            <p>Penting untuk diketahui bahwa ZanSnapTik tidak berafiliasi dengan TikTok atau Bytedance Ltd. Semua merek dagang, logo, dan konten tetap dimiliki oleh pemilik aslinya. Website ini hanya menyediakan sarana teknis untuk mempermudah pengguna mengakses konten yang sudah tersedia secara publik.</p>
+        </div>
+        
+        <div class="tab-content" id="terms">
+            <h3>Ketentuan Layanan</h3>
+            <p>Dengan menggunakan layanan di ZanSnapTik, berarti Anda setuju dengan poin-poin berikut:</p>
+            
+            <h3>1. Penggunaan Layanan</h3>
+            <ul>
+                <li>Layanan ini hanya berupa alat teknis yang membantu pengguna menyimpan konten publik dari TikTok.</li>
+                <li>Hasil unduhan sepenuhnya digunakan sesuai keputusan pengguna.</li>
+            </ul>
+            
+            <h3>2. Kepemilikan Konten</h3>
+            <ul>
+                <li>Seluruh video, musik, maupun materi lain yang diunduh adalah milik sah dari kreator atau pemilik aslinya.</li>
+                <li>ZanSnapTik tidak menyimpan file apa pun di server kami.</li>
+            </ul>
+            
+            <h3>3. Tanggung Jawab</h3>
+            <ul>
+                <li>Segala bentuk penggunaan hasil unduhan sepenuhnya berada di pihak pengguna.</li>
+                <li>Pengguna wajib memastikan penggunaan sesuai hukum dan aturan yang berlaku di wilayah masing-masing.</li>
+            </ul>
+            
+            <h3>4. Perubahan & Penghentian</h3>
+            <ul>
+                <li>ZanSnapTik dapat melakukan pembaruan, penambahan, atau penghentian layanan sewaktu-waktu.</li>
+                <li>Akses layanan bersifat gratis dan tidak menjanjikan ketersediaan permanen.</li>
+            </ul>
+            
+            <h3>5. Privasi</h3>
+            <ul>
+                <li>Website ini tidak mengumpulkan data pribadi selain informasi teknis standar (misalnya data kunjungan untuk analisis umum).</li>
+                <li>Kami tidak pernah membagikan data kunjungan kepada pihak ketiga untuk tujuan komersial.</li>
+            </ul>
+        </div>
+        
+        <div class="tab-content" id="developer">
+            <h3>Informasi Developer</h3>
+            <p>Saya adalah seorang Developer Website Pemula asal Jawa Tengah, Indonesia, saat ini bersekolah di SMP 1 Jekulo. Dengan semangat belajar dan berkembang, saya fokus pada pembuatan website sederhana hingga bertahap menuju website yang modern, responsif, dan mudah digunakan.</p>
+            
+            <p>Dalam perjalanan ini, saya tidak sendirian. Saya didukung oleh teman-teman yang selalu memberi motivasi, yaitu Bayu (Best Friend), Miftahul Kirom (Friend), Dzaky (Friend), Fadhil (Friend), Richie (Friend), serta ZanXtzyZ Official (Team). Kehadiran mereka menjadi dorongan besar untuk terus mengasah kemampuan saya di dunia web development.</p>
+            
+            <p>Beberapa hasil karya website yang telah berhasil saya buat antara lain:</p>
+            <ul>
+                <li>ZanSnapTik → Website Downloader TikTok No Watermark</li>
+                <li>Calculator Simple → Aplikasi kalkulator sederhana berbasis web</li>
+                <li>Dan beberapa project kecil lainnya yang terus saya kembangkan</li>
+            </ul>
+            
+            <p>Untuk informasi lebih lanjut atau peluang kolaborasi, Anda dapat menghubungi saya melalui:</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fab fa-tiktok"></i>
+                    <span>TikTok: <a href="https://tiktok.com/@zanxtzyzofficial" target="_blank">@zanxtzyzofficial</a></span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-youtube"></i>
+                    <span>YouTube: <a href="https://youtube.com/@zanxtzydev" target="_blank">@zanxtzydev</a></span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram: <a href="https://www.instagram.com/zanxtzyzofficial" target="_blank">@zanxtzyzofficial</a></span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email: <a href="mailto:muhammadafendypratama@gmail.com">muhammadafendypratama@gmail.com</a></span>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 ZanSnapTik - TikTok Downloader No Watermark</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            const tiktokUrlInput = document.getElementById('tiktokUrl');
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error');
+            const resultElement = document.getElementById('result');
+            const videoPreview = document.getElementById('videoPreview');
+            const videoDownload = document.getElementById('videoDownload');
+            const audioDownload = document.getElementById('audioDownload');
+            const videoTitle = document.getElementById('videoTitle');
+            const videoDuration = document.getElementById('videoDuration');
+            const videoAuthor = document.getElementById('videoAuthor');
+            const soundButton = document.getElementById('soundButton');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Show first tab by default
+            document.getElementById('about').style.display = 'block';
+            
+            // Tab functionality
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    
+                    // Show selected tab content
+                    document.getElementById(tabId).style.display = 'block';
+                });
+            });
+            
+            // Sound effect
+            const sound = new Audio("https://files.catbox.moe/42e754.mp3");
+            sound.volume = 1.0;
+            
+            soundButton.addEventListener('click', function() {
+                sound.play();
+                soundButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                setTimeout(() => {
+                    soundButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }, 500);
+            });
+            
+            downloadBtn.addEventListener('click', function() {
+                const tiktokUrl = tiktokUrlInput.value.trim();
+                
+                if (!tiktokUrl) {
+                    showError('Masukkan link TikTok terlebih dahulu!');
+                    return;
+                }
+                
+                if (!isValidTikTokUrl(tiktokUrl)) {
+                    showError('Link TikTok tidak valid! Pastikan link dari TikTok.');
+                    return;
+                }
+                
+                // Reset state
+                hideError();
+                hideResult();
+                showLoading();
+                
+                // Menggunakan API untuk mendapatkan video TikTok
+                fetchTikTokVideo(tiktokUrl);
+            });
+            
+            function isValidTikTokUrl(url) {
+                const tiktokRegex = /^https?:\/\/(www\.)?tiktok\.com\/.+/;
+                return tiktokRegex.test(url);
+            }
+            
+            async function fetchTikTokVideo(url) {
+                try {
+                    // Menggunakan API dari tikwm.com
+                    const apiUrl = 'https://www.tikwm.com/api/';
+                    
+                    const formData = new FormData();
+                    formData.append('url', url);
+                    formData.append('count', 12);
+                    formData.append('cursor', 0);
+                    formData.append('web', 1);
+                    formData.append('hd', 1);
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json, text/javascript, */*; q=0.01',
+                            'Origin': 'https://www.tikwm.com',
+                            'Referer': 'https://www.tikwm.com/',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data && data.data) {
+                        displayResult(data.data);
+                    } else {
+                        showError('Tidak dapat mengunduh video. Coba lagi nanti atau gunakan link yang berbeda.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('Terjadi kesalahan. Pastikan link valid dan coba lagi.');
+                } finally {
+                    hideLoading();
+                }
+            }
+            
+            function displayResult(data) {
+                // Set video preview
+                if (data.play) {
+                    videoPreview.src = 'https://www.tikwm.com' + data.play;
+                }
+                
+                // Set download links
+                if (data.play) {
+                    videoDownload.href = 'https://www.tikwm.com' + data.play;
+                    videoDownload.download = 'tiktok-video.mp4';
+                }
+                
+                if (data.music) {
+                    audioDownload.href = 'https://www.tikwm.com' + data.music;
+                    audioDownload.download = 'tiktok-audio.mp3';
+                } else {
+                    audioDownload.style.display = 'none';
+                }
+                
+                // Set video info
+                videoTitle.textContent = data.title || '-';
+                videoDuration.textContent = data.duration ? data.duration + ' detik' : '-';
+                videoAuthor.textContent = data.author ? data.author.nickname : '-';
+                
+                showResult();
+            }
+            
+            function showLoading() {
+                loadingElement.style.display = 'block';
+            }
+            
+            function hideLoading() {
+                loadingElement.style.display = 'none';
+            }
+            
+            function showResult() {
+                resultElement.style.display = 'block';
+            }
+            
+            function hideResult() {
+                resultElement.style.display = 'none';
+            }
+            
+            function showError(message) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            function hideError() {
+                errorElement.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
